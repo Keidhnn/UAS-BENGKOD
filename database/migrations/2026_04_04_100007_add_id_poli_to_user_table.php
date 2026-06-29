@@ -12,8 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-        $table->foreignId('id_poli')->nullable()->constrained('poli')->cascadeOnDelete();
-    });
+            // Karena kolom 'id_poli' sudah dibuat di migration users, 
+            // kita hanya perlu menambahkan aturan relasinya (foreign key) ke tabel 'polis'
+            $table->foreign('id_poli')
+                  ->references('id')
+                  ->on('poli') // Ganti menjadi 'poli' jika nama tabel di databasemu tidak pakai 's'
+                  ->cascadeOnDelete();
+        });
     }
 
     /**
@@ -22,8 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-        $table->dropForeign(['id_poli']);
-        $table->dropColumn('id_poli');
+            $table->dropForeign(['id_poli']);
         });
     }
 };

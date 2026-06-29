@@ -26,8 +26,12 @@ class JadwalPeriksaController extends Controller
             'jam_selesai' => 'required'
         ]);
 
+        // Ambil data user (dokter) yang sedang login
+        $user = Auth::user();
+
         JadwalPeriksa::create([
-            'id_dokter' => Auth::id(),
+            'id_dokter' => $user->id,
+            'id_poli'   => $user->id_poli, // Data id_poli diambil dari profil dokter yang login
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai

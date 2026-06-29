@@ -11,8 +11,9 @@ use App\Http\Controllers\Dokter\JadwalPeriksaController;
 use App\Http\Controllers\Dokter\PeriksaPasienController;
 use App\Http\Controllers\Dokter\RiwayatPasienController;
 
+// RUTE UTAMA DIUBAH: Sekarang otomatis diarahkan (redirect) ke rute bernama 'login'
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 // Authentication Routes

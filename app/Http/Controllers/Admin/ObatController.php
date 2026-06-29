@@ -20,24 +20,25 @@ class ObatController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'nama_obat' => 'required|string',
-            'kemasan' => 'required|string',
-            'harga' => 'required|integer',
-        ]);
+{
+    $request->validate([
+        'nama_obat' => 'required|string',
+        'kemasan' => 'required|string',
+        'harga' => 'required|integer',
+        'stok' => 'required|integer|min:0', // Validasi stok
+    ]);
 
-        Obat::create([
-            'nama_obat' => $request->nama_obat,
-            'kemasan' => $request->kemasan,
-            'harga' => $request->harga
-        ]);
+    Obat::create([
+        'nama_obat' => $request->nama_obat,
+        'kemasan' => $request->kemasan,
+        'harga' => $request->harga,
+        'stok' => $request->stok // Simpan data stok
+    ]);
 
-        return redirect()->route('obat.index')
-            ->with('message', 'Data Obat Berhasil dibuat')
-            ->with('type', 'success');
-    }
-
+    return redirect()->route('obat.index')
+        ->with('message', 'Data Obat Berhasil dibuat')
+        ->with('type', 'success');
+}
     public function edit(string $id)
     {
         $obat = Obat::findOrFail($id);
@@ -45,26 +46,27 @@ class ObatController extends Controller
             'obat'=> $obat
         ]);
     }
+public function update(Request $request, string $id)
+{
+    $request->validate([
+        'nama_obat' => 'required|string',
+        'kemasan' => 'nullable|string',
+        'harga' => 'required|integer',
+        'stok' => 'required|integer|min:0', // Validasi stok
+    ]);
 
-    public function update(Request $request, string $id)
-    {
-        $request->validate([
-            'nama_obat' => 'required|string',
-            'kemasan' => 'nullable|string',
-            'harga' => 'required|integer',
-        ]);
+    $obat = Obat::findOrFail($id);
+    $obat->update([
+        'nama_obat' => $request->nama_obat,
+        'kemasan' => $request->kemasan,
+        'harga' => $request->harga,
+        'stok' => $request->stok // Update data stok
+    ]);
 
-        $obat = Obat::findOrFail($id);
-        $obat->update([
-            'nama_obat' => $request->nama_obat,
-            'kemasan' => $request->kemasan,
-            'harga' => $request->harga
-        ]);
-
-        return redirect()->route('obat.index')
-            ->with('message', 'Data Obat berhasil di edit')
-            ->with('type', 'success');
-    }
+    return redirect()->route('obat.index')
+        ->with('message', 'Data Obat berhasil di edit')
+        ->with('type', 'success');
+}
 
     public function destroy(string $id)
     {

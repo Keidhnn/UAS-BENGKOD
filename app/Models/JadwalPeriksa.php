@@ -10,6 +10,7 @@ class JadwalPeriksa extends Model
 
     protected $fillable = [
         'id_dokter',
+        'id_poli',
         'hari',
         'jam_mulai',
         'jam_selesai',

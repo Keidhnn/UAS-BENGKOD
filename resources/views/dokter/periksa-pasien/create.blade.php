@@ -12,6 +12,21 @@
         </h2>
     </div>
 
+    {{-- Alert Notifikasi Error & Sukses --}}
+    @if(session('error'))
+        <div class="mb-6 px-4 py-3 leading-normal text-red-700 bg-red-100 rounded-lg border border-red-200" role="alert">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            {{ session('error') }}
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div class="mb-6 px-4 py-3 leading-normal text-green-700 bg-green-100 rounded-lg border border-green-200" role="alert">
+            <i class="fas fa-check-circle mr-2"></i>
+            {{ session('success') }}
+        </div>
+    @endif
+
     {{-- Card --}}
     <div class="card bg-base-100 shadow-sm rounded-2xl border border-slate-200">
         <div class="card-body p-8">
@@ -28,10 +43,21 @@
                     <select id="select-obat" class="select select-bordered w-full rounded-lg border-2 px-4">
                         <option value="">-- Pilih Obat --</option>
                         @foreach ($obats as $obat)
+                            {{-- Disable opsi jika stok 0 dan beri label visual --}}
                             <option value="{{ $obat->id }}"
                                 data-nama="{{ $obat->nama_obat }}"
-                                data-harga="{{ $obat->harga }}">
-                                {{ $obat->nama_obat }} - Rp{{ number_format($obat->harga) }}
+                                data-harga="{{ $obat->harga }}"
+                                {{ $obat->stok == 0 ? 'disabled' : '' }}>
+                                {{ $obat->nama_obat }} - Rp{{ number_format($obat->harga) }} 
+                                
+                                {{-- Indikator Stok (Opsional Nilai Plus) --}}
+                                @if($obat->stok == 0)
+                                    (STOK HABIS)
+                                @elseif($obat->stok <= 5)
+                                    (Sisa Stok: {{ $obat->stok }} - Menipis!)
+                                @else
+                                    (Stok: {{ $obat->stok }})
+                                @endif
                             </option>
                         @endforeach
                     </select>
